@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>The Tuner</title>
+ <style>
+
+/* ========================= */
+/* RESET */
+/* ========================= */
+
+* {
+   box-sizing: border-box;
+   margin: 0;
+   padding: 0;
+}
+
+html, body {
+   height: 100%;
+}
+
+body {
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+   color: #333;
+   background-color: #f3f4f8;
+   display: flex;
+   flex-direction: column;
+   overflow: hidden; /* prevents body scroll on desktop */
+}
+
+/* ========================= */
+/* HEADER */
+/* ========================= */
+
+header {
+   background: linear-gradient(135deg, #231649, #402189);
+   color: snow;
+   padding: 8px;
+   text-align: center;
+   flex-shrink: 0;
+}
+
+/* ========================= */
+/* NAVIGATION */
+/* ========================= */
+
+nav {
+   background-color: #402189;
+   padding: 8px;
+   display: flex;
+   justify-content: center;
+   gap: 12px;
+   flex-shrink: 0;
+}
+
+nav button {
+   border: 1px solid rgba(255,255,255,0.2);
+   padding: 6px 14px;
+   color: #fff;
+   background: transparent;
+   border-radius: 20px;
+   cursor: pointer;
+   transition: all 0.3s ease;
+}
+
+nav button:hover {
+   background: rgba(255,255,255,0.15);
+}
+
+/* ========================= */
+/* MAIN LAYOUT */
+/* ========================= */
+
+main {
+   flex: 1;
+   display: grid;
+   grid-template-columns: 1fr 1fr; /* Equal width */
+   gap: 8px;
+   padding: 8px;
+   height: calc(100vh - 150px); /* fills remaining screen */
+}
+
+/* ========================= */
+/* FIELDSETS (PANELS) */
+/* ========================= */
+
+fieldset {
+   border: none;
+   border-radius: 12px;
+   background: #ffffff;
+   padding: 8px;
+   display: flex;
+   flex-direction: column;
+   height: 100%;  /* equal height */
+   overflow: hidden; /* prevent panel expansion */
+   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+legend {
+   font-size: 1rem;
+   font-weight: bold;
+   color: #fff;
+   background-color: #402189;
+   padding: 4px 10px;
+   border-radius: 20px;
+   margin-bottom: 10px;
+   flex-shrink: 0;
+   text-align: center;
+}
+
+/* ========================= */
+/* LEFT PANEL CONTENT */
+/* ========================= */
+
+.card-container {
+   flex: 1;
+   overflow-y: auto; /* scroll inside panel */
+   display: flex;
+   flex-direction: column;
+   gap: 14px;
+   padding-right: 6px;
+}
+
+/* ========================= */
+/* CARDS */
+/* ========================= */
+
+.card {
+   background-color: #f6f5fa;
+   padding: 14px;
+   border-radius: 10px;
+   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+   transform: translateY(-3px);
+   box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.card a {
+   text-decoration: none;
+   color: #333;
+   display: block;
+}
+
+.card a h3 {
+   text-align: center;
+   color: #402189;
+   margin-bottom: 8px;
+   font-size: 1.05rem;
+}
+
+.card a p {
+   text-align: justify;
+   font-size: 0.95rem;
+}
+
+.web-notes-iframe {
+   width: 100%;
+   height: 260px;
+   border: none;
+   border-radius: 10px;
+   margin-top: 8px;
+}
+
+/* ========================= */
+/* RIGHT PANEL (RSS) */
+/* ========================= */
+
+.rss-container {
+   display: flex;
+   flex-direction: column;
+   height: 100%;
+}
+
+#rss-reader {
+   flex: 1;
+   overflow-y: auto; /* internal scroll */
+   display: flex;
+   flex-direction: column;
+   gap: 12px;
+   padding-right: 6px;
+}
+
+/* RSS Card */
+
+.rss-card {
+   display: grid;
+   grid-template-columns: 1fr;
+   gap: 12px;
+   padding: 12px;
+   background-color: #f6f5fa;
+   border-radius: 10px;
+   transition: box-shadow 0.2s ease;
+}
+
+.rss-card:hover {
+   box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+.rss-image img {
+   width: 100%;
+   height: 200px;
+   object-fit: cover;
+   border-radius: 10px;
+   display: block;
+}
+
+.rss-content h2 {
+   font-size: 1rem;
+   margin-bottom: 6px;
+}
+
+.rss-content p {
+   font-size: 0.92rem;
+   text-align: justify;
+}
+
+/* Hide unused elements */
+
+.source-badge,
+.read-link,
+.pub-date {
+   display: none;
+}
+
+/* ========================= */
+/* FOOTER */
+/* ========================= */
+
+footer {
+   background-color: #402189;
+   padding: 14px;
+   color: snow;
+   text-align: center;
+   flex-shrink: 0;
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+@media (max-width: 1024px) {
+
+   body {
+      overflow: auto;
+   }
+
+   main {
+      grid-template-columns: 1fr;
+      height: auto;
+   }
+
+   fieldset {
+      height: auto;
+   }
+
+}
+
+@media (min-width: 1200px) {
+   .rss-card {
+      grid-template-columns: 1fr 2fr;
+      align-items: start;
+   }
+}
+/* ========================= */
+/* HIDE SCROLLBARS (KEEP SCROLL FUNCTIONAL) */
+/* ========================= */
+
+/* Chrome, Edge, Safari */
+.card-container::-webkit-scrollbar,
+#rss-reader::-webkit-scrollbar {
+   display: none;
+}
+
+/* Firefox */
+.card-container,
+#rss-reader {
+   scrollbar-width: none;
+}
+
+/* IE (legacy safe) */
+.card-container,
+#rss-reader {
+   -ms-overflow-style: none;
+}
+
+</style>
+
+</head>
+
+<body>
+      <header>
+         <h1>
+            THE TUNER 
+         </h1>
+         <p>At the Resonant Point</p>
+      </header>
+
+      <nav>
+         <button>Home</button>
+         <button>About</button>
+         <button>Projects</button>
+      </nav>
+
+      <main>  
+  
+            <fieldset class="card-container">
+               <legend>My World</legend>
+               
+                     <div class="card">
+                        <a href="https://benareshnaik.github.io/TED/">
+                              <h3>
+                                 The Essential Dose
+                              </h3> 
+                              <p>
+                                 I have tried to build a website to bring the essential information that truly matters. Many more updates are yet to come. Meanwhile, just have a preview of "The Essential Dose" website.
+                              </p>
+                        </a>
+                     </div>
+
+                     <div class="card">
+                        <a href="web-notes.html">
+                              <h3>
+                                 Take Quick Web Notes while browsing
+                              </h3>
+                              <p>
+                                 While browsing, ideas often come and go. This webpage ensures they stay. Designed for quick, effortless note-taking without leaving your flow — simple, instant, and always ready to capture thoughts and save them as pdf for later reference.
+                              </p>
+                        </a>
+                     </div>
+
+                     <div class="card">
+                        <a href="web-notes.html">
+                           <h3>Take Quick Web Notes</h3>
+                        </a>
+                        <iframe class="web-notes-iframe" src="web-notes.html" frameborder="0" scrolling="no">
+                        </iframe>
+                     </div>
+
+                     <div class="card">
+                        <a href="https://benareshnaik.github.io/note/">
+                              <h3>
+                                 Handwriting Note on Web
+                              </h3>
+                              <p>
+                                 A long-standing idea on my to-do list has now become reality with the help of Codex. Experience the simplicity of pen on plain paper, smooth and precise. Enjoy a distraction-free full-page canvas with built-in palm rejection for comfortable, uninterrupted writing.
+                              </p>
+                        </a>
+                     </div>
+
+                     <div class="card">
+                        <a href="https://benareshnaik.github.io/note/">
+                           <h3>Writedown Quick Web Notes</h3>
+                        </a>
+                        <iframe class="web-notes-iframe" src="https://benareshnaik.github.io/note/" frameborder="0" scrolling="no">
+                        </iframe>
+                     </div>
+               
+            </fieldset>
+
+            <fieldset class="rss-container">
+
+                  <legend>Our World</legend>
+                  
+                  <script src="multi-rss.js"></script>
+
+                  <div id="rss-reader">
+                        <p>Loading articles...</p>
+                  </div>
+
+            </fieldset>
+          
+      </main>
+
+      <footer>
+         <p>
+            This Website is developed by Naresh B
+         </p>
+      </footer>
+
+</body>
+
+</html>
